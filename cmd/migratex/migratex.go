@@ -6,7 +6,7 @@ import (
 	"os"
 
 	v4 "github.com/golang-migrate/migrate/v4"
-	"github.com/joaomagfreitas/migratex/configs"
+	"github.com/joaomagfreitas/configx"
 	"github.com/joaomagfreitas/migratex/migraters"
 	"github.com/joaomagfreitas/migratex/migrations"
 )
@@ -89,7 +89,7 @@ func connectionString() string {
 		log.Fatal("neither connection string (--conn) or config file (--config) specified.")
 	}
 
-	cfg, err := configs.Sqlite(*cfg)
+	cfg, err := configx.Unmarshal[configx.Sqlite](*cfg)
 	if err != nil {
 		log.Fatal(err)
 	}
