@@ -3,12 +3,13 @@ module github.com/joaomagfreitas/migratex
 go 1.27.0
 
 require (
-	github.com/goccy/go-yaml v1.19.2
 	github.com/golang-migrate/migrate/v4 v4.20.1
+	github.com/joaomagfreitas/configx v0.0.0-20260914135024-451fa486402b
 	modernc.org/sqlite v1.18.1
 )
 
 require (
+	github.com/goccy/go-yaml v1.19.2 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/kballard/go-shellquote v0.0.0-20180428030007-95032a82bc51 // indirect
 	github.com/mattn/go-isatty v0.0.16 // indirect
