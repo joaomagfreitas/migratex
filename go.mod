@@ -4,7 +4,7 @@ go 1.27.0
 
 require (
 	github.com/golang-migrate/migrate/v4 v4.20.1
-	github.com/joaomagfreitas/configx v0.0.0-20260916131001-255e5441a29c
+	github.com/joaomagfreitas/configx v0.0.0-20260916141156-e6db9b5c8584
 	modernc.org/sqlite v1.59.0
 )
 
