@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"flag"
 	"log"
 	"os"
@@ -89,10 +90,44 @@ func connectionString() string {
 		log.Fatal("neither connection string (--conn) or config file (--config) specified.")
 	}
 
-	cfg, err := configx.Unmarshal[configx.Sqlite](*cfg)
+	st, err := os.Stat(*cfg)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	return cfg.Conn()
+	if st.IsDir() {
+		log.Fatalf("expected yaml config file at %s", *cfg)
+	}
+
+	dec := []func(p string) (string, error){
+		func(p string) (string, error) {
+			cfg, derr := configx.Unmarshal[configx.Sqlite](*cfg)
+			if derr != nil {
+				return "", derr
+			}
+
+			return cfg.Conn(), nil
+		},
+
+		func(p string) (string, error) {
+			cfg, derr := configx.Unmarshal[configx.EmbedApp](*cfg)
+			if derr != nil {
+				return "", derr
+			}
+
+			return cfg.Database.Conn(), nil
+		},
+	}
+
+	for _, d := range dec {
+		conn, cerr := d(*cfg)
+		if cerr == nil {
+			return conn
+		}
+
+		err = errors.Join(cerr)
+	}
+
+	log.Fatalf("tried multiple configuration schemas, but none matched the config file: %v", err)
+	return ""
 }
